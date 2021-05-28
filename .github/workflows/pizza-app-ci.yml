@@ -27,7 +27,7 @@ jobs:
 
       - name: Print variables
         run: | 
-          echo ${{ github.sha[0:8] }}
+          echo ${{ github.sha }}
           echo ${{ github.ref }}    
       
         if: ${{ ! github.event.inputs.docker_tag }} 
