@@ -8,7 +8,7 @@ on:
         required: true
       docker_tag:
         description: 'docker_tag'
-        required: false
+        required: true
         default: 'false'
 
 jobs:
