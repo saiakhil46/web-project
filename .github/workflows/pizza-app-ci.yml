@@ -8,7 +8,7 @@ on:
         required: true
       docker_tag:
         description: 'docker_tag'
-        required: true
+        required: false
 
 jobs:
   Build-and-Push:
@@ -27,12 +27,21 @@ jobs:
 
       - name: Print variables
         run: | 
-          echo ${{ github.sha }}
+          echo ${{ github.sha[0:8] }}
           echo ${{ github.ref }}    
+      
+      if: ${{ ! github.event.inputs.docker_tag }} 
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: pizza-app/
+          push: true
+          tags: saiakhil46/pizza-app:${{ github.event.inputs.git_branch_or_tag }}-${{ github.sha }}
 
-#      - name: Build and push
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: pizza-app/
-#          push: true
-#          tags: saiakhil46/pizza-app:${{ github.event.inputs.docker_tag }}
+      if: ${{ github.event.inputs.docker_tag }} 
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: pizza-app/
+          push: true
+          tags: saiakhil46/pizza-app:${{ github.event.inputs.docker_tag }}    
