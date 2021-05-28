@@ -9,6 +9,7 @@ on:
       docker_tag:
         description: 'docker_tag'
         required: false
+        default: 'false'
 
 jobs:
   Build-and-Push:
@@ -30,7 +31,7 @@ jobs:
           echo ${{ github.sha }}
           echo ${{ github.ref }}    
       
-        if: ${{ ! github.event.inputs.docker_tag }} 
+        if: ${{ github.event.inputs.docker_tag == 'false' }} 
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -38,7 +39,7 @@ jobs:
           push: true
           tags: saiakhil46/pizza-app:${{ github.event.inputs.git_branch_or_tag }}-${{ github.sha }}
 
-        if: ${{ github.event.inputs.docker_tag }} 
+        if: ${{ github.event.inputs.docker_tag != 'false' }} 
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
