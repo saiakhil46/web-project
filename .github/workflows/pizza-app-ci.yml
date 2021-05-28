@@ -37,7 +37,7 @@ jobs:
         with:
           context: pizza-app/
           push: true
-          tags: saiakhil46/pizza-app:${{ github.sha }}   
+          tags: saiakhil46/pizza-app:${{ github.event.inputs.git_branch_or_tag }}-${{ github.sha }}   
 
         if: ${{ github.event.inputs.docker_tag != 'false' }} 
       - name: Build and push
