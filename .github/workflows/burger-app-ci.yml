@@ -26,10 +26,15 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Setting required vars
+        run : |
+          echo "github_branch=$(echo ${{ github.ref }} | cut -d '/' -f 3)" >> $GITHUB_ENV
+          echo "short_SHA=$(echo ${{ github.sha }} | cut -c 1-6)" >> $GITHUB_ENV   
+
       - name: Print variables
         run: | 
-          echo ${{ github.sha }}
-          echo ${{ github.ref }}  
+          echo ${{ env.github_branch }}
+          echo ${{ env.short_SHA }}  
       
       - name: Build and push
         if: ${{ github.event.inputs.docker_tag == 'false' }}
