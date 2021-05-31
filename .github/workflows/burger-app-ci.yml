@@ -28,8 +28,7 @@ jobs:
 
       - name: Setting required vars
         run : |
-          echo "github_branch=$(/usr/bin/git rev-parse --abbrev-ref HEAD | cut -d '/' -f 3)" >> $GITHUB_ENV
-          echo "short_SHA=$(/usr/bin/git log -1 --format='%H' | cut -c 1-6)" >> $GITHUB_ENV   
+          echo "short_SHA=$(/usr/bin/git log -1 --format='%H' | cut -c 1-7)" >> $GITHUB_ENV   
 
       - name: Print variables
         run: | 
@@ -42,7 +41,7 @@ jobs:
         with:
           context: burger-app/
           push: true
-          tags: saiakhil46/burger-app:${{ env.github_branch }}-${{ env.short_SHA }}  
+          tags: saiakhil46/burger-app:${{ github.event.inputs.git_branch_or_tag }}-${{ env.short_SHA }}  
 
       - name: Build and push
         if: ${{ github.event.inputs.docker_tag != 'false' }} 
