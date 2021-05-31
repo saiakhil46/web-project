@@ -28,8 +28,8 @@ jobs:
 
       - name: Setting required vars
         run : |
-          echo "github_branch=$(echo ${{ github.ref }} | cut -d '/' -f 3)" >> $GITHUB_ENV
-          echo "short_SHA=$(echo ${{ github.sha }} | cut -c 1-6)" >> $GITHUB_ENV   
+          echo "github_branch=$(/usr/bin/git rev-parse --abbrev-ref HEAD | cut -d '/' -f 3)" >> $GITHUB_ENV
+          echo "short_SHA=$(/usr/bin/git log -1 --format='%H' | cut -c 1-6)" >> $GITHUB_ENV   
 
       - name: Print variables
         run: | 
