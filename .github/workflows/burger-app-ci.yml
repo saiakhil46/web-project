@@ -42,7 +42,7 @@ jobs:
         with:
           context: burger-app/
           push: true
-          tags: saiakhil46/burger-app:${{ github.event.inputs.git_branch_or_tag }}-${{ github.sha }}   
+          tags: saiakhil46/burger-app:${{ env.github_branch }}-${{ env.short_SHA }}  
 
       - name: Build and push
         if: ${{ github.event.inputs.docker_tag != 'false' }} 
