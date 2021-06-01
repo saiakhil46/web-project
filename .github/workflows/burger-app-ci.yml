@@ -6,6 +6,7 @@ on:
       git_branch_or_tag:
         description: 'git_branch_or_tag'
         required: true
+        default: 'false'
       docker_tag:
         description: 'docker_tag'
         required: true
@@ -15,7 +16,12 @@ jobs:
   Build-and-Push:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout (Default)
+        if: ${{ github.event.inputs.git_branch_or_tag == 'false' }}
+        uses: actions/checkout@v2
+
+      - name: Checkout (git_branch_or_tag)
+        if: ${{ github.event.inputs.git_branch_or_tag != 'false' }}
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.git_branch_or_tag }}
@@ -26,18 +32,33 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Setting required vars
+        run : |
+          echo "short_SHA=$(/usr/bin/git log -1 --format='%H' | cut -c 1-7)" >> $GITHUB_ENV   
+          echo "git_checkout_branch=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+
       - name: Print variables
         run: | 
-          echo ${{ github.sha }}
-          echo ${{ github.ref }}  
-      
+          echo ${{ env.github_branch }}
+          echo ${{ env.short_SHA }} 
+          echo ${{ github.ref }}
+          echo ${{ github.sha }} 
+
       - name: Build and push
-        if: ${{ github.event.inputs.docker_tag == 'false' }}
+        if: ${{ github.event.inputs.docker_tag == 'false' && github.event.inputs.git_branch_or_tag == 'false' }}
         uses: docker/build-push-action@v2
         with:
           context: burger-app/
           push: true
-          tags: saiakhil46/burger-app:${{ github.event.inputs.git_branch_or_tag }}-${{ github.sha }}   
+          tags: saiakhil46/burger-app:${{ env.git_checkout_branch }}-${{ env.short_SHA }}  
+
+      - name: Build and push
+        if: ${{ github.event.inputs.docker_tag == 'false' && github.event.inputs.git_branch_or_tag != 'false' }}
+        uses: docker/build-push-action@v2
+        with:
+          context: burger-app/
+          push: true
+          tags: saiakhil46/burger-app:${{ github.event.inputs.git_branch_or_tag }}-${{ env.short_SHA }}  
 
       - name: Build and push
         if: ${{ github.event.inputs.docker_tag != 'false' }} 
