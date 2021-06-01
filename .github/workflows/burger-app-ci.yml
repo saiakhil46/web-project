@@ -39,7 +39,7 @@ jobs:
 
       - name: Print variables
         run: | 
-          echo ${{ env.github_branch }}
+          echo ${{ env.git_checkout_branch }}
           echo ${{ env.short_SHA }} 
           echo ${{ github.ref }}
           echo ${{ github.sha }} 
