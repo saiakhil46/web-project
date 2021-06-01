@@ -1,4 +1,4 @@
-name: burger-App 
+name: Burger-App 
 
 on:
   workflow_dispatch:
