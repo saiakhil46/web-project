@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pizza-app-deployment
+  labels:
+    app: pizza-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pizza-app
+  template:
+    metadata:
+      name: pizza-app
+      labels:
+        app: pizza-app
+    spec:
+      containers:
+      - name: pizza-app
+        image: saiakhil46/pizza-app:main-1ffbdf3
+        imagePullPolicy: Always   #The default pull policy is IfNotPresent which causes the Kubelet to skip pulling an image if it already exists.
+      restartPolicy: Always #always restart pod when it got crashed

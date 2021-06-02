@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: burger-app-deployment
+  labels:
+    app: burger-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: burger-app
+  template:
+    metadata:
+      name: burger-app
+      labels:
+        app: burger-app
+    spec:
+      containers:
+      - name: burger-app
+        image: saiakhil46/burger-app:main-c89d364
+        imagePullPolicy: Always  #The default pull policy is IfNotPresent which causes the Kubelet to skip pulling an image if it already exists.
+      restartPolicy: Always  #always restart pod when it got crashed 

@@ -1,0 +1,62 @@
+nameOverride: ""
+fullnameOverride: ""
+
+namespace: default
+replicaCount: 2
+
+strategy1: 
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 0 
+
+strategy2: 
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 25%
+    maxUnavailable: 25%
+
+image:
+  repository: saiakhil46/burger-app:main-c89d364
+  pullPolicy: Always
+  restartPolicy: Always
+
+imagePullSecrets:
+  - name: dockersecrete
+
+containerPort: 80
+
+#livenessReadinessProbes:
+#  readinessProbe:
+#    httpGet:
+#      path: /notification-server/actuator
+#      port: 8083
+#    initialDelaySeconds: 10
+#    periodSeconds: 10
+#    timeoutSeconds: 10
+#    failureThreshold: 2
+#    successThreshold: 1
+#  livenessProbe:
+#    httpGet:
+#      path: /notification-server/actuator
+#      port: 8083
+#    initialDelaySeconds: 10
+#    periodSeconds: 10
+#    timeoutSeconds: 10
+#    failureThreshold: 2  
+#    successThreshold: 1
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 80
+  nodePort: 31384
+

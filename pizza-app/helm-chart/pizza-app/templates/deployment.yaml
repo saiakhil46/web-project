@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pizza-app.fullname" . }}
+  labels:
+    {{- include "pizza-app.labels" . | nindent 4 }}
+  namespace: {{ .Values.namespace }}
+spec: 
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "pizza-app.selectorLabels" . | nindent 6 }}
+  strategy: 
+    {{- if eq .Values.replicaCount 1.0 }}
+    {{- toYaml .Values.strategy1 | nindent 4}}
+    {{- else }}
+    {{- toYaml .Values.strategy2 | nindent 4}} 
+    {{- end }} 
+  template:
+    metadata:
+      labels:
+        {{- include "pizza-app.selectorLabels" . | nindent 8 }}
+    spec: 
+      containers:
+        - image: {{ .Values.image.repository }}
+          name: {{ include "pizza-app.fullname" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+      restartPolicy: {{ .Values.image.restartPolicy }}
