@@ -6,10 +6,9 @@ on:
       docker_tag:
         description: 'docker_tag'
         required: true
-        default: 'false'
 
 jobs:
-  Build-and-Push:
+  Deploy-To-EKS:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout (Default)
