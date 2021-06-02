@@ -26,4 +26,4 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          command: helm upgrade pizza-app --install --atomic --wait pizza-app/helm-chart/pizza-app -f pizza-app/helm-chart/override.yaml --set image.repository=${{ github.event.inputs.docker_tag }}
+          command: helm upgrade pizza-app --install --atomic --wait pizza-app/helm-chart/pizza-app -f pizza-app/helm-chart/override.yaml --set image.repository=saiakhil46/pizza-app:${{ github.event.inputs.docker_tag }}

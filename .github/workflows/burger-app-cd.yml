@@ -26,4 +26,4 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          command: helm upgrade burger-app --install --atomic --wait burger-app/helm-chart/burger-app -f burger-app/helm-chart/override.yaml --set image.repository=${{ github.event.inputs.docker_tag }}
+          command: helm upgrade burger-app --install --atomic --wait burger-app/helm-chart/burger-app -f burger-app/helm-chart/override.yaml --set image.repository=saiakhil46/burger-app:${{ github.event.inputs.docker_tag }}
