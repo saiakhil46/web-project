@@ -1,4 +1,4 @@
-name: Pizza-App 
+name: Pizza-App-CI
 
 on:
   workflow_dispatch:
