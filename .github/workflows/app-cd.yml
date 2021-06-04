@@ -6,7 +6,7 @@ on:
       docker_tag:
         description: 'docker_tag'
         required: true
-      application_name: 
+      app_name: 
         description: 'app_name'
         required: true  
 
@@ -19,12 +19,10 @@ jobs:
 
       - name: Download override file
         run: |
-          curl -L -O  https://${{ SECRETS.OVERRIDE_TOKEN }}@raw.githubusercontent.com/saiakhil46/override-repo/main/${{ github.event.inputs.app_name }}-override.yml 
+          curl -L -O  https://${{ secrets.OVERRIDE_TOKEN }}@raw.githubusercontent.com/saiakhil46/override-repo/main/${{ github.event.inputs.app_name }}-override.yml 
           ls -lrth
-          mv ${{ github.event.inputs.app_name }}-override.yml ${{ github.event.inputs.app_name }}/helm-chart/${{ github.event.inputs.app_name }}
-          ls -lrth ${{ github.event.inputs.app_name }}/helm-chart/${{ github.event.inputs.app_name }}
-          cat ${{ github.event.inputs.app_name }}/helm-chart/${{ github.event.inputs.app_name }}
-          
+          cat ${{ github.event.inputs.app_name }}-override.yml
+
       - name: AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -37,4 +35,4 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          command: helm upgrade ${{ github.event.inputs.app_name }} --install --atomic --wait ${{ github.event.inputs.app_name }}/helm-chart/${{ github.event.inputs.app_name }} -f ${{ github.event.inputs.app_name }}/helm-chart/${{ github.event.inputs.app_name }}-override.yaml --set image.repository=saiakhil46/${{ github.event.inputs.app_name }}:${{ github.event.inputs.docker_tag }}
+          command: helm upgrade ${{ github.event.inputs.app_name }} --install --atomic --wait ${{ github.event.inputs.app_name }}/helm-chart/${{ github.event.inputs.app_name }} -f ${{ github.event.inputs.app_name }}-override.yaml --set image.repository=saiakhil46/${{ github.event.inputs.app_name }}:${{ github.event.inputs.docker_tag }}
