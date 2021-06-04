@@ -19,11 +19,12 @@ jobs:
 
       - name: Download override file
         run: |
-          curl -L -O  https://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@raw.githubusercontent.com/saiakhil46/override-repo/main/${{ github.event.inputs.app_name }}-override.yml 
+          curl -L -O  https://${{ SECRETS.OVERRIDE_TOKEN }}@raw.githubusercontent.com/saiakhil46/override-repo/main/${{ github.event.inputs.app_name }}-override.yml 
           ls -lrth
           mv ${{ github.event.inputs.app_name }}-override.yml ${{ github.event.inputs.app_name }}/helm-chart/${{ github.event.inputs.app_name }}
           ls -lrth ${{ github.event.inputs.app_name }}/helm-chart/${{ github.event.inputs.app_name }}
-  
+          cat ${{ github.event.inputs.app_name }}/helm-chart/${{ github.event.inputs.app_name }}
+          
       - name: AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
