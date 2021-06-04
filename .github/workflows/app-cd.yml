@@ -35,4 +35,4 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          command: helm upgrade ${{ github.event.inputs.app_name }} --install --atomic --wait ${{ github.event.inputs.app_name }}/helm-chart/${{ github.event.inputs.app_name }} -f ${{ github.event.inputs.app_name }}-override.yaml --set image.repository=saiakhil46/${{ github.event.inputs.app_name }}:${{ github.event.inputs.docker_tag }}
+          command: helm upgrade ${{ github.event.inputs.app_name }} --install --atomic --wait ${{ github.event.inputs.app_name }}/helm-chart/${{ github.event.inputs.app_name }} -f ${{ github.event.inputs.app_name }}-override.yml --set image.repository=saiakhil46/${{ github.event.inputs.app_name }}:${{ github.event.inputs.docker_tag }}
