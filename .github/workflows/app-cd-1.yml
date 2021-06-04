@@ -1,0 +1,38 @@
+name: Application Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      docker_tag:
+        description: 'docker_tag'
+        required: true
+      app_name: 
+        description: 'app_name'
+        required: true  
+
+jobs:
+  Deploy-To-EKS:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (Default)
+        uses: actions/checkout@v2
+
+      - name: Download override file
+        run: |
+          curl -L -O  https://${{ secrets.OVERRIDE_TOKEN }}@raw.githubusercontent.com/saiakhil46/override-repo/main/${{ github.event.inputs.app_name }}-override.yml 
+          ls -lrth
+          cat ${{ github.event.inputs.app_name }}-override.yml
+
+      - name: AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: helm deploy
+        uses: koslib/helm-eks-action@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          command: helm template ${{ github.event.inputs.app_name }} ${{ github.event.inputs.app_name }}/helm-chart/${{ github.event.inputs.app_name }} --set image.repository=saiakhil46/${{ github.event.inputs.app_name }}:${{ github.event.inputs.docker_tag }} | kubectl apply -f-
