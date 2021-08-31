@@ -1,4 +1,4 @@
-name: Application Deployment-1
+name: Application Deployment
 
 on:
   workflow_dispatch:
